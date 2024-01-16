@@ -15,11 +15,14 @@ dotenv.config({ path: "./config.env" });
 // Connect to database
 (async function () {
   try {
-    await mongoose.connect(
-      "mongodb+srv://mikeanthony595:XjF2RsqwFErtqutZ@g-up.3dxfsmr.mongodb.net/g-up?retryWrites=true&w=majority"
+    const db = await mongoose.connect(
+      "mongodb+srv://mikeanthony595:mikeanthony595@g-up.3dxfsmr.mongodb.net/g-up?retryWrites=true&w=majority"
     );
-  } finally {
-    console.log("Successfully connected to Database!");
+    if (db) {
+      console.log("Successfully connected to Database!");
+    }
+  } catch (err) {
+    console.log(err);
   }
   // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
 })();
