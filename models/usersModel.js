@@ -14,6 +14,12 @@ const userSchema = new mongoose.Schema({
     enum: ["user", "admin"],
     default: "user",
   },
+  phoneNumber: {
+    type: String,
+    required: [true, "A user must have a phone number"],
+    minlength: 11,
+    maxLength: 11,
+  },
   password: {
     type: String,
     required: [true, "Please provide a password"],
