@@ -6,6 +6,8 @@ const User = require('../models/userModel')
 const AppError = require('../utils/appError')
 const catchAsyncErrors = require('../utils/catchAsyncErrors')
 
+const Email = require('../utils/email')
+
 const signToken = id => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
@@ -42,6 +44,9 @@ exports.signup = catchAsyncErrors(async (req, res, next) => {
     passwordConfirm: req.body.passwordConfirm,
     role: req.body.role,
   })
+  if (newUser) {
+    await new Email().sendEmail()
+  }
   createSendToken(newUser, 201, req, res)
 })
 
