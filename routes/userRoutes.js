@@ -11,6 +11,6 @@ router.post('/login', authController.login)
 // User must be authenticated after this middleware
 router.use(authController.authenticated)
 
-router.get('/', userController.getAllUser)
+router.get('/', authController.restrictTo('admin'), userController.getAllUser)
 
 module.exports = router

@@ -18,7 +18,7 @@ const createSendToken = (user, statusCode, req, res) => {
   res.cookie('jwt', token, {
     expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
     httpOnly: true,
-    secure: req.secure || req.headers('x-forwarded-proto') === 'https',
+    // secure: req.secure || req.headers('x-forwarded-proto') === 'https',
   })
 
   // remove the password to the output
@@ -37,9 +37,10 @@ exports.signup = catchAsyncErrors(async (req, res, next) => {
   const newUser = await User.create({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
+    phoneNumber: req.body.phoneNumber,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
-    phoneNumber: req.body.phoneNumber,
+    role: req.body.role,
   })
   createSendToken(newUser, 201, req, res)
 })
@@ -110,7 +111,7 @@ exports.authenticated = catchAsyncErrors(async (req, res, next) => {
 
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
-    // roles ['admin', 'lead-guide']
+    // roles ['admin', 'user']
     if (!roles.includes(req.user.role)) {
       return next(new AppError(`You dont have enough permission to perform this operation`, 401))
     }
