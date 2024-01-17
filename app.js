@@ -8,10 +8,12 @@ const cookieParser = require("cookie-parser");
 const compression = require("compression");
 const cors = require("cors");
 
+const userRoutes = require("./routes/userRoutes");
+
 // Start express app
 const app = express();
 
-app.enable("trust proxy");
+// app.enable("trust proxy");
 
 // Set security http headers
 app.use(helmet());
@@ -40,6 +42,10 @@ app.use(mongoSanitize());
 app.use(xss());
 
 app.use(compression());
+
+// Mounting Routers
+
+app.use("/api/v1/users", userRoutes);
 
 // HTTP request logger
 if (process.env.NODE_ENV === "development") {
