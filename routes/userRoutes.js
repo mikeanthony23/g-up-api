@@ -12,5 +12,6 @@ router.post('/login', authController.login)
 router.use(authController.authenticated)
 
 router.get('/', authController.restrictTo('admin'), userController.getAllUser)
+router.patch('/me', userController.updateCurrentUser)
 
 module.exports = router
