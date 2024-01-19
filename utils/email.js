@@ -36,4 +36,22 @@ module.exports = class Email {
 
     console.log('Email Sent')
   }
+
+  // Send the actual email for forgotpassword
+  async sendEmailPassword(url) {
+    // email options
+    const mailOptions = {
+      from: this.from,
+      // to: this.to,
+      to: 'mikeanthony594@gmail.com',
+      subject: 'Password Reset Token',
+      text: 'Welcome to G-UP xD',
+      html: `<h1>Your reset password url is ${url}</h1>`,
+    }
+
+    // 3) Create a transport and send email
+    await this.transporter().sendMail(mailOptions)
+
+    console.log('Email Sent')
+  }
 }

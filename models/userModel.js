@@ -16,10 +16,10 @@ const userSchema = new mongoose.Schema({
     minLength: 2,
     maxlength: 255,
   },
-  role: {
+  email: {
     type: String,
-    enum: ['user', 'admin'],
-    default: 'user',
+    required: [true, 'A user must have an email'],
+    unique: true,
   },
   phoneNumber: {
     type: String,
@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema({
   },
   passwordConfirm: {
     type: String,
-    required: [true, 'Please confirm your password'],
+    required: [true, 'Please add your confirmation password'],
     validate: {
       validator: function (el) {
         return el === this.password
@@ -45,6 +45,11 @@ const userSchema = new mongoose.Schema({
       message: 'Passwords are not the same',
     },
     select: false,
+  },
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user',
   },
   createdAt: {
     type: Date,

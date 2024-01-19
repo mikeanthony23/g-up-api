@@ -39,6 +39,7 @@ exports.signup = catchAsyncErrors(async (req, res, next) => {
   const newUser = await User.create({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
+    email: req.body.email,
     phoneNumber: req.body.phoneNumber,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
@@ -51,22 +52,16 @@ exports.signup = catchAsyncErrors(async (req, res, next) => {
 })
 
 exports.login = catchAsyncErrors(async (req, res, next) => {
-  const { phoneNumber, password } = req.body
+  const { email, password } = req.body
 
   //1.) Check if number and password exist
-  if (!phoneNumber || !password) {
+  if (!email || !password) {
     return next(new AppError('Please provide number and password!', 400))
   }
 
   //2.) Check if user exsists and password is correct
-  const user = await User.findOne({ phoneNumber }).select('+password')
-  console.log(user)
-  // console.log(password === user.password);
+  const user = await User.findOne({ email }).select('+password')
 
-  await bcrypt.compare(password, user.password).then(res => {
-    // res === true
-    console.log(res)
-  })
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Incorrect number or password', 401))
   }
@@ -133,19 +128,23 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
 
   // 2.) Generate the random token
   const resetToken = user.createPasswordResetToken()
+
   await user.save({ validateBeforeSave: false })
   // 3.) Send it to users email
 
   try {
-    const resetURL = `${req.protocol}://${req.get('host')}/api/v1/resetPassword/${resetToken}`
+    const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`
 
-    await new Email(user, resetURL).sendPasswordReset()
+    console.log(resetURL)
+
+    await new Email().sendEmailPassword(resetURL)
 
     res.status(200).json({
       status: 'success',
       message: 'Token sent to email!!',
     })
   } catch (err) {
+    console.log(err)
     user.passwordResetToken = undefined
     user.passwordResetExpires = undefined
     await user.save({ validateBeforeSave: false })

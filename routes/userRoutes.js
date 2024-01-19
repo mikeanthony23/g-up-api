@@ -8,10 +8,14 @@ const router = express.Router()
 router.post('/signup', authController.signup)
 router.post('/login', authController.login)
 
+router.post('/forgotPassword', authController.forgotPassword)
+router.patch('/resetPassword/:token', authController.resetPassword)
+
 // User must be authenticated after this middleware
 router.use(authController.authenticated)
 
 router.get('/', authController.restrictTo('admin'), userController.getAllUser)
 router.patch('/me', userController.updateCurrentUser)
+router.patch('/updateMyPassword', authController.updatePassword)
 
 module.exports = router
