@@ -21,6 +21,27 @@ app.use(helmet())
 
 // Implement CORS
 app.use(cors())
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      baseUri: ["'self'"],
+      fontSrc: ["'self'", 'https:', 'data:'],
+      scriptSrc: [
+        "'self'",
+        'https://unpkg *',
+        '*',
+        'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
+        'https://js.stripe.com*',
+      ],
+      imgSrc: ["'self'", 'https://unpkg *', '*', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'],
+      objectSrc: ["'none'"],
+      frameSrc: ["'self'", 'https:', 'data:'],
+      styleSrc: ["'self'", 'https:', 'unsafe-inline'],
+      upgradeInsecureRequests: [],
+    },
+  }),
+)
 app.options('*', cors())
 
 // limit requests from same IP ( 100 request per IP )
