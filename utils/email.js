@@ -10,11 +10,16 @@ module.exports = class Email {
 
   transporter() {
     return nodeMailer.createTransport({
-      service: 'Gmail',
-      host: 'smtp.gmail.com',
+      // service: 'Gmail',
+      // host: 'smtp.gmail.com',
+      // auth: {
+      //   user: 'mikeanthony595@gmail.com',
+      //   pass: 'wsrmzoigikdgjmjs',
+      // },
+      host: 'sandbox.smtp.mailtrap.io',
       auth: {
-        user: 'mikeanthony595@gmail.com',
-        pass: 'wsrmzoigikdgjmjs',
+        user: '7302bc4eb44a55',
+        pass: 'deb5751a3434a9',
       },
     })
   }

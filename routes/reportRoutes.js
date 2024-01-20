@@ -13,5 +13,16 @@ router
     authController.restrictTo('admin'),
     reportController.getAllReport,
   )
+  .patch(
+    authController.authenticated,
+    authController.restrictTo('admin'),
+    reportController.updateReportStatus,
+  )
 
+router.patch(
+  '/updateStatus/',
+  authController.authenticated,
+  authController.restrictTo('admin'),
+  reportController.updateReportStatus,
+)
 module.exports = router
