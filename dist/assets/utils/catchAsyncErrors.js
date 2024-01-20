@@ -1,0 +1,1 @@
+module.exports=c=>(e,o,t)=>{c(e,o,t).catch(t)};

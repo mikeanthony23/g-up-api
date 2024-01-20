@@ -1,0 +1,1 @@
+class AppError extends Error{constructor(r,t){super(r),this.statusCode=t,this.status=`${t}`.startsWith("4")?"fail":"error",this.isOperational=!0,Error.captureStackTrace(this,this.constructor)}}module.exports=AppError;
