@@ -26,7 +26,7 @@ exports.updateCurrentUser = catchAsyncErrors(async (req, res, next) => {
   }
 
   // allowd fields to be updated
-  const filteredBody = filterObj(req.body, 'firstName', 'lastName')
+  const filteredBody = filterObj(req.body, 'firstName', 'lastName', 'email')
 
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
