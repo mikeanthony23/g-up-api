@@ -14,19 +14,29 @@ const reportSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'A report must have a reference number'],
     },
-    category: [
-      {
-        type: String,
-        required: [true, 'A report must have a category'],
-      },
-    ],
+    // category: [
+    //   {
+    //     type: String,
+    //     required: [true, 'A report must have a category'],
+    //   },
+    // ],
     amount: {
       type: Number,
       required: [true, 'A report must have a amount'],
     },
+    // photos: [
+    //   {
+    //     type: String,
+    //     required: [true, 'A report must have a photo'],
+    //   },
+    // ],
     field: {
       type: String,
       required: [true, 'A report must have a field'],
+    },
+    date: {
+      type: Date,
+      required: [true, 'A report must have a date'],
     },
     createdAt: {
       type: Date,
@@ -34,6 +44,11 @@ const reportSchema = new mongoose.Schema(
     },
     incidentReport: {
       type: String,
+    },
+    status: {
+      type: String,
+      enum: ['pending', 'approved', 'rejected', 'deleted'],
+      default: 'pending',
     },
     user: {
       type: mongoose.Schema.ObjectId,
