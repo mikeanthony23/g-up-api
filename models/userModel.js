@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema({
     minLength: 2,
     maxlength: 255,
   },
+  photo: {
+    type: String,
+    default: 'default.png',
+  },
   email: {
     type: String,
     required: [true, 'A user must have an email'],
