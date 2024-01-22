@@ -15,7 +15,12 @@ router.patch('/resetPassword/:token', authController.resetPassword)
 router.use(authController.authenticated)
 
 router.get('/', authController.restrictTo('admin'), userController.getAllUser)
-router.patch('/me', userController.updateCurrentUser)
+router.patch(
+  '/me',
+  userController.uploadProfilePhoto,
+  userController.resizeUserPhoto,
+  userController.updateCurrentUser,
+)
 router.patch('/updateMyPassword', authController.updatePassword)
 router.get('/deactivate', userController.deactivate)
 

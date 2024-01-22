@@ -1,6 +1,10 @@
 const User = require('../models/userModel')
 const catchAsyncErrors = require('../utils/catchAsyncErrors')
 const AppError = require('../utils/appError')
+const sharp = require('sharp')
+
+const multer = require('multer')
+const multerStorage = multer.memoryStorage()
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {}
@@ -9,6 +13,33 @@ const filterObj = (obj, ...allowedFields) => {
   })
   return newObj
 }
+
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true)
+  } else {
+    cb(new AppError('Not an image! Please upload only images', 400), false)
+  }
+}
+const uploadProfile = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+})
+
+exports.uploadProfilePhoto = uploadProfile.single('avatar')
+exports.resizeUserPhoto = catchAsyncErrors(async (req, res, next) => {
+  if (!req.file) return next()
+
+  req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`
+
+  await sharp(req.file.buffer)
+    .resize(500, 500)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`app/uploads/images/users/${req.file.filename}`)
+
+  next()
+})
 
 exports.getAllUser = catchAsyncErrors(async (req, res, next) => {
   const users = await User.find()
@@ -27,6 +58,7 @@ exports.updateCurrentUser = catchAsyncErrors(async (req, res, next) => {
 
   // allowd fields to be updated
   const filteredBody = filterObj(req.body, 'firstName', 'lastName', 'email')
+  if (req.file) filteredBody.photo = req.file.filename
 
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
