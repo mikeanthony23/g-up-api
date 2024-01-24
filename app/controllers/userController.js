@@ -36,7 +36,8 @@ exports.resizeUserPhoto = catchAsyncErrors(async (req, res, next) => {
     .resize(500, 500)
     .toFormat('jpeg')
     .jpeg({ quality: 90 })
-    .toFile(`app/uploads/images/users/${req.file.filename}`)
+    // .toFile(`app/uploads/images/users/${req.file.filename}`)
+    .toFile(`http://nh-banner.kesug.com/uploads/${req.file.filename}`)
 
   next()
 })
