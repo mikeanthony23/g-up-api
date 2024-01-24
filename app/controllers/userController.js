@@ -1,10 +1,10 @@
+const sharp = require('sharp')
+const multer = require('multer')
+const multerStorage = multer.memoryStorage()
+
 const User = require('../models/userModel')
 const catchAsyncErrors = require('../utils/catchAsyncErrors')
 const AppError = require('../utils/appError')
-const sharp = require('sharp')
-
-const multer = require('multer')
-const multerStorage = multer.memoryStorage()
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {}
@@ -21,6 +21,7 @@ const multerFilter = (req, file, cb) => {
     cb(new AppError('Not an image! Please upload only images', 400), false)
   }
 }
+
 const uploadProfile = multer({
   storage: multerStorage,
   fileFilter: multerFilter,
@@ -36,8 +37,7 @@ exports.resizeUserPhoto = catchAsyncErrors(async (req, res, next) => {
     .resize(500, 500)
     .toFormat('jpeg')
     .jpeg({ quality: 90 })
-    // .toFile(`app/uploads/images/users/${req.file.filename}`)
-    .toFile(`http://nh-banner.kesug.com/uploads/${req.file.filename}`)
+    .toFile(`app/uploads/images/users/${req.file.filename}`)
 
   next()
 })

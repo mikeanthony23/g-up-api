@@ -24,12 +24,12 @@ const reportSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'A report must have a amount'],
     },
-    // photos: [
-    //   {
-    //     type: String,
-    //     required: [true, 'A report must have a photo'],
-    //   },
-    // ],
+    photos: [
+      {
+        type: String,
+        required: [true, 'A report must have a photo'],
+      },
+    ],
     field: {
       type: String,
       required: [true, 'A report must have a field'],

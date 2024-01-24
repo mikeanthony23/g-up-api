@@ -7,7 +7,11 @@ const router = express.Router()
 
 router
   .route('/')
-  .post(reportController.createReport)
+  .post(
+    reportController.uploadReportImages,
+    reportController.resizeReportImages,
+    reportController.createReport,
+  )
   .get(
     authController.authenticated,
     authController.restrictTo('admin'),
@@ -18,6 +22,13 @@ router
     authController.restrictTo('admin'),
     reportController.updateReportStatus,
   )
+
+router.post(
+  '/reportImages',
+  authController.authenticated,
+  reportController.uploadReportImages,
+  reportController.resizeReportImages,
+)
 
 router.patch(
   '/updateStatus/',
