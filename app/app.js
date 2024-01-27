@@ -21,7 +21,10 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
 }
 
-// app.enable("trust proxy");
+// enables trust proxy
+if (process.env.NODE_ENV === 'production') {
+  app.enable('trust proxy')
+}
 
 // Set security http headers
 app.use(helmet())
