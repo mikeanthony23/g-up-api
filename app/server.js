@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
+
 const dotenv = require('dotenv')
+dotenv.config({ path: './config.env' })
+
 const app = require('./app')
+
 const port = process.env.PORT || 3000
 
 process.on('uncaughtException', err => {
@@ -8,8 +12,6 @@ process.on('uncaughtException', err => {
   console.log('UNCAUGHT EXCEPTION.... Shutting Down')
   process.exit(1)
 })
-
-dotenv.config({ path: './config.env' })
 
 // Connect to database
 ;(async function () {

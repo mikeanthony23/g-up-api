@@ -1,11 +1,9 @@
 const crypto = require('crypto')
-const bcrypt = require('bcryptjs')
 const { promisify } = require('util')
 const jwt = require('jsonwebtoken')
 const User = require('../models/userModel')
 const AppError = require('../utils/appError')
 const catchAsyncErrors = require('../utils/catchAsyncErrors')
-
 const Email = require('../utils/email')
 
 const signToken = id => {
@@ -13,6 +11,7 @@ const signToken = id => {
     expiresIn: process.env.JWT_EXPIRES_IN,
   })
 }
+console.log(process.env.NODE_ENV)
 
 const createSendToken = (user, statusCode, req, res) => {
   const token = signToken(user._id)

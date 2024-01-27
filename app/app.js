@@ -6,13 +6,20 @@ const mongoSanitize = require('express-mongo-sanitize')
 const xss = require('xss-clean')
 const cookieParser = require('cookie-parser')
 const compression = require('compression')
+const AppError = require('./utils/appError')
 const cors = require('cors')
 
 const userRoutes = require('./routes/userRoutes')
 const reportRoutes = require('./routes/reportRoutes')
+const globalErrorHandler = require('./controllers/errorControlller')
 
 // Start express app
 const app = express()
+
+// HTTP request logger
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'))
+}
 
 // app.enable("trust proxy");
 
@@ -66,13 +73,13 @@ app.use(xss())
 app.use(compression())
 
 // Mounting Routers
-
 app.use('/api/v1/users', userRoutes)
 app.use('/api/v1/reports', reportRoutes)
 
-// HTTP request logger
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'))
-}
+app.all('*', (req, res, next) => {
+  next(new AppError(`Cant find ${req.originalUrl} on this server!`, 404))
+})
+
+app.use(globalErrorHandler)
 
 module.exports = app
