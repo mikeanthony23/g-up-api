@@ -51,18 +51,18 @@ exports.signup = catchAsyncErrors(async (req, res, next) => {
 })
 
 exports.login = catchAsyncErrors(async (req, res, next) => {
-  const { email, password } = req.body
+  const { phoneNumber, password } = req.body
 
   //1.) Check if number and password exist
-  if (!email || !password) {
-    return next(new AppError('Please provide number and password!', 400))
+  if (!phoneNumber || !password) {
+    return next(new AppError('Please provide phone number or password!', 400))
   }
 
   //2.) Check if user exsists and password is correct
-  const user = await User.findOne({ email }).select('+password')
+  const user = await User.findOne({ phoneNumber }).select('+password')
 
   if (!user || !(await user.correctPassword(password, user.password))) {
-    return next(new AppError('Incorrect number or password', 401))
+    return next(new AppError('Incorrect phone number or password', 401))
   }
 
   //3.) If everything is ok, send token to client
